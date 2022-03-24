@@ -1,5 +1,4 @@
 import csv from 'csv-parser'
-import { response } from 'express';
 import * as fs from 'fs'
 import { IContactMessageRepository } from 'src/repositories/interfaces/IContactMessageRepository';
 import { IFileRepository } from "../repositories/interfaces/IFileRepository";
@@ -10,7 +9,7 @@ export type UploadFileOutput = {
   isValid: boolean
 }
 
-type CsvContent = {
+export type CsvContent = {
   '0': string,
   '1': string
 }
@@ -24,6 +23,8 @@ export class UploadFiles {
 
   async execute(csvFile: Express.Multer.File): Promise<UploadFileOutput[]> {
     const response: UploadFileOutput[] = [];
+
+    if (!csvFile) return []
 
     const file = await this._fileRepository.create({
       file_name: csvFile.filename
