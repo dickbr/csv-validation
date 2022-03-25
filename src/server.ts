@@ -6,6 +6,7 @@ import 'dotenv/config'
 console.log('heroku port******', process.env.PORT)
 createConnection(connectionConfig).then(() => {
   const port = process.env.PORT || 5000
+  console.log('server starting')
   app.listen(port, () =>
     console.log(
       `Server Start On Port ${port}`

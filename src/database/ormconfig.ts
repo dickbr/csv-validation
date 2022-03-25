@@ -19,7 +19,7 @@ const connectionConfig: ConnectionOptions = {
   ],
   dropSchema: false,
   synchronize: false,
-  logging: false,
+  logging: true,
   migrations: [path.resolve(__dirname, 'migrations', '*{.ts,.js}')],
   cli: {
     migrationsDir: path.resolve(__dirname, 'migrations'),
