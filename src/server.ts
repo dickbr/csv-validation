@@ -3,9 +3,8 @@ import app from './app'
 import connectionConfig from './database/ormconfig'
 import 'dotenv/config'
 
-console.log('heroku port******', process.env.PORT)
 createConnection(connectionConfig).then(() => {
-  const port = process.env.PORT || 5000
+  const port = process.env.PORT || 3001
   console.log('server starting')
   app.listen(port, () =>
     console.log(
