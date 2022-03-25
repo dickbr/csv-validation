@@ -23,7 +23,7 @@ export class CampaignController {
   @OnUndefined(204)
   @Get('/template')
   async getTemplate(@Res() response: Response): Promise<any> {
-    const file = path.join(__dirname, '/../template/campanha01.csv');
+    const file = path.join(__dirname, '/../campanha01.csv');
     await promisify<string, void>(response.download.bind(response))(file)
     return response;
   }
