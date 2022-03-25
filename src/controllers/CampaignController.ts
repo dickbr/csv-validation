@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { Body, Get, JsonController, OnUndefined, Post, Res, UploadedFile } from "routing-controllers";
+import { Body, Get, HttpCode, JsonController, OnUndefined, Post, Res, UploadedFile } from "routing-controllers";
 import 'reflect-metadata'
 import { promisify } from "util";
 import path from 'path'
@@ -11,7 +11,8 @@ import { FileRepository } from "../repositories/implementations/FileRepository"
 import { UploadFiles } from "../use-cases/UploadFile";
 import { ContactInput } from "../dto/ContactInput";
 import { SaveContacts } from "../use-cases/SaveContacts";
-import { ContactOutput } from "../dto/ContactOutput";
+import { ContactOutput, ValidateFileOutput } from "../dto/ContactOutput";
+import { ValidateFileContent } from "../use-cases/ValidateFileContent";
 
 @JsonController('/campaign')
 export class CampaignController {
@@ -40,17 +41,31 @@ export class CampaignController {
     return await uploadFiles.execute(fileCsv)
   }
 
-  @OnUndefined(204)
+  @HttpCode(201)
   @Post('/contacts')
   async uploadContacts(
     @Body() body: ContactInput
-  ): Promise<ContactOutput[]> {
-    const saveContacts = new SaveContacts(
-      this._fileRepository,
-      this._contactMessageRepository
-    )
+  ): Promise<{ message: string }> {
 
-    return await saveContacts.execute(body)
+    try {
+      const saveContacts = new SaveContacts(
+        this._fileRepository,
+        this._contactMessageRepository
+      )
+
+      await saveContacts.execute(body)
+
+      return { message: 'success' }
+    } catch (err) {
+      return { message: 'error' }
+    }
+  }
+
+  @Post('/validate')
+  async validateFileContent(
+    @Body() body: ContactInput
+  ): Promise<ValidateFileOutput | undefined> {
+    const validateFileContent = new ValidateFileContent()
+    return await validateFileContent.execute(body)
   }
 }
-
