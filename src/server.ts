@@ -5,9 +5,10 @@ import 'dotenv/config'
 
 async function main(): Promise<void> {
   await createConnection(connectionConfig)
-  app.listen(process.env.PORT, () =>
+  const port = process.env.PORT || 5000
+  app.listen(port, () =>
     console.log(
-      `Server Start On Port ${process.env.PORT}`
+      `Server Start On Port ${port}`
     )
   )
 }
